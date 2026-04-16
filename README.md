@@ -14,7 +14,8 @@ Este repositorio contiene todos los entregables desarrollados a lo largo del cur
 
 | | |
 |---|---|
-| **Nombre** | Ricard M. Huaman A. |
+| **Nombre** | Ricardo M. Huaman A. |
+| **Código** | 202101963D |
 | **Curso** | Computación Gráfica |
 | **Institución** | UTEA |
 | **Semestre** | 2026 - I |
