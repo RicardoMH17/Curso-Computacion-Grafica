@@ -14,7 +14,7 @@ Este repositorio contiene todos los entregables desarrollados a lo largo del cur
 
 | | |
 |---|---|
-| **Nombre** | Ricard Huaman |
+| **Nombre** | Ricard M. Huaman A. |
 | **Curso** | Computación Gráfica |
 | **Institución** | UTEA |
 | **Semestre** | 2026 - I |
