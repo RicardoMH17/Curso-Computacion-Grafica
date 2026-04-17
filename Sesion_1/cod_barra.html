@@ -9,7 +9,7 @@
     <h2>Gráfico de barras</h2>
     <h3>Realizado por: Ricardo Manuel Huaman Ataulluco</h3>
 
-    <canvas id="myCanvas" width="500" height="500" style="border:10px solid #1DAE56;"></canvas>
+    <canvas id="myCanvas" width="400" height="500" style="border:10px solid #1DAE56;"></canvas>
 
     <script>
         var canvas = document.getElementById("myCanvas");
@@ -17,7 +17,6 @@
 
         var datos = [100, 150, 200, 300, 350];
         var colores = ["red", "blue", "green", "orange", "purple"];
-        var textos = ["50%", "60%", "70%", "90%", "100%"];
 
         var x = 50;
         var width = 50;
@@ -33,10 +32,6 @@
             ctx.fillStyle = colores[i];
             ctx.fill();
             ctx.stroke();
-
-            // Escribir texto encima de la barra
-            ctx.fillStyle = "black";
-            ctx.fillText(textos[i], x + width / 2, 440 - datos[i]);
 
             x += width + 20;
         }
