@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARRAS</title>
+</head>
+<body>
+    <h2>Gráfico de barras</h2>
+    <h3>Realizado por: Ricardo Manuel Huaman Ataulluco</h3>
+
+    <canvas id="myCanvas" width="500" height="500" style="border:10px solid #1DAE56;"></canvas>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var datos = [100, 150, 200, 300, 350];
+        var colores = ["red", "blue", "green", "orange", "purple"];
+        var textos = ["50%", "60%", "70%", "90%", "100%"];
+
+        var x = 50;
+        var width = 50;
+
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "black";
+
+        for (var i = 0; i < datos.length; i++) {
+            // Dibujar barra
+            ctx.beginPath();
+            ctx.rect(x, 450 - datos[i], width, datos[i]);
+            ctx.fillStyle = colores[i];
+            ctx.fill();
+            ctx.stroke();
+
+            // Escribir texto encima de la barra
+            ctx.fillStyle = "black";
+            ctx.fillText(textos[i], x + width / 2, 440 - datos[i]);
+
+            x += width + 20;
+        }
+    </script>
+</body>
+</html>
