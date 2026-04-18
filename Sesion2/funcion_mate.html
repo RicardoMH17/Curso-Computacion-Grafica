@@ -1,1 +1,37 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de función1</title>
+</head>
+<body>
+    <h2>Grafico de una funcion1</h2>
+    <canvas id="myCanvas" width="500" height="500" style="border: 1px solid black;"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext('2d');
+
+        // Dibujar ejes
+        ctx.beginPath();
+        ctx.moveTo(0, 250);   // eje X
+        ctx.lineTo(500, 250);
+        ctx.moveTo(250, 0);   // eje Y
+        ctx.lineTo(250, 500);
+        ctx.stroke();
+
+        // Funcion a graficar: f(x) = x^2 invertida
+        ctx.beginPath();
+        ctx.strokeStyle = "blue";
+
+        for (var x = -250; x < 250; x++) {
+            var y = Math.pow(x, 2) / 100;
+            ctx.lineTo(250 + x, 250 - y);
+        }
+
+        ctx.strokeStyle = 'blue';
+        ctx.stroke();
+    </script>
+</body>
+</html>
