@@ -26,6 +26,7 @@ Este repositorio contiene todos los entregables desarrollados a lo largo del cur
 |---|---|
 | Función Matemática | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/funcion_mate.html) |
 | Línea Dinámica | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/linea_dinamica.html) |
+| Línea Dinámica Doble| [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/doble_linea_dinamica.html) |
 
 ## Autor
 
