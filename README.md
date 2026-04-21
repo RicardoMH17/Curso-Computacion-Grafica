@@ -50,11 +50,6 @@ Este repositorio contiene todos los entregables desarrollados a lo largo del cur
 
 [![GitHub](https://img.shields.io/badge/GitHub-Curso--Computacion--Grafica-181717?style=for-the-badge&logo=github)](https://github.com/RicardoMH17/Curso-Computacion-Grafica)
 
-## Licencia
-
-Este repositorio es de uso académico. El código puede ser utilizado como referencia con atribución al autor.
-
----
 
 <p align="center">
   <em>Desarrollado como parte del curso de Computación Gráfica</em>
