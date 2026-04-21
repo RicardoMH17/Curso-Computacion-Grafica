@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curva Dinámica de la Función Coseno</title>
+    <style>
+        /* estilo general de la pagina */
+        body {
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+        /* titulo principal */
+        h2 {
+            color: #00ff88;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        /* nombre del autor */
+        h3 {
+            color: #a0c4ff;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        /* estilo del canvas */
+        #myCanvas {
+            border: 3px solid #00ff88;
+            border-radius: 10px;
+            background-color: #16213e;
+        }
+    </style>
+</head>
+<body>
+    <h2>Curva Dinámica de la Función Coseno</h2>
+    <h3>Realizado por: Ricardo M. Huaman A.</h3>
+
+    <!-- area de dibujo para la funcion coseno -->
+    <canvas id="myCanvas" width="1500" height="400"></canvas>
+
+    <script>
+        // obtener el canvas y el contexto de dibujo
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // variable de tiempo para animar la curva
+        var time = 0;
+
+        // funcion para dibujar la curva coseno
+        function drawGraph() {
+            // limpiar el canvas antes de redibujar
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // dibujar la curva de la funcion coseno
+            ctx.beginPath();
+            ctx.strokeStyle = "#00ff88"; // color de la curva
+            ctx.lineWidth = 3; // grosor de la linea
+
+            // recorrer los valores de x para calcular y = cos(x)
+            for (var x = 0; x < canvas.width; x++) {
+                // calcular el valor de y usando la funcion coseno con el tiempo
+                var y = Math.cos(x * 0.010 + time);
+
+                if (x === 0) {
+                    // posicionar el punto de inicio al centro del canvas
+                    ctx.moveTo(x, canvas.height / 2 - y * 100);
+                } else {
+                    // dibujar la linea hacia el siguiente punto
+                    ctx.lineTo(x, canvas.height / 2 - y * 100);
+                }
+            }
+            // trazar la curva en el canvas
+            ctx.stroke();
+
+            // dibujar los ejes cartesianos encima de la curva
+            ctx.beginPath();
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 1;
+            // eje X en el centro vertical del canvas
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            // eje Y en el centro horizontal del canvas
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+        }
+
+        // funcion para animar la curva incrementando el tiempo
+        function animate() {
+            drawGraph(); // dibujar el grafico
+            time += 0.025; // incrementar el tiempo para mover la curva
+            requestAnimationFrame(animate); // llamar a la funcion de animacion
+        }
+
+        // iniciar la animacion
+        animate();
+    </script>
+</body>
+</html>

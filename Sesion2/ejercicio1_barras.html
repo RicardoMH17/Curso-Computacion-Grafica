@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Barras Dinámico</title>
+    <style>
+        /* estilo general de la pagina */
+        body {
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+        /* titulo principal */
+        h2 {
+            color: #00ff88;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        /* nombre del autor */
+        h3 {
+            color: #a0c4ff;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        /* contenedor principal del gráfico */
+        #grafico {
+            display: flex;
+            align-items: flex-end;
+            gap: 25px;
+            height: 400px;
+            border: 3px solid #00ff88;
+            padding: 15px;
+            width: 600px;
+            background-color: #16213e;
+            border-radius: 10px;
+        }
+        /* estilo de cada barra */
+        .barra {
+            width: 100px;
+            background-color: steelblue;
+            transition: height 0.5s;
+            position: relative;
+            border-radius: 4px 4px 0 0;
+        }
+        /* etiqueta de valor encima de cada barra */
+        .barra span {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Gráfico de Barras Dinámico</h2>
+    <h3>Realizado por: Ricardo M. Huaman A.</h3>
+
+    <!-- contenedor donde se generan las barras -->
+    <div id="grafico"></div>
+
+    <script>
+        // colores para cada barra
+        var colores = ["red", "blue", "green", "orange", "purple"];
+
+        // obtener el contenedor del gráfico
+        var grafico = document.getElementById("grafico");
+
+        // crear las 5 barras iniciales
+        for (var i = 0; i < 5; i++) {
+            // crear elemento div para cada barra
+            var barra = document.createElement("div");
+            barra.className = "barra";
+            barra.style.backgroundColor = colores[i];
+
+            // crear etiqueta de valor encima de la barra
+            var etiqueta = document.createElement("span");
+            barra.appendChild(etiqueta);
+
+            // agregar la barra al contenedor
+            grafico.appendChild(barra);
+        }
+
+        // funcion para actualizar los valores de las barras
+        function actualizarBarras() {
+            // obtener todas las barras del contenedor
+            var barras = document.querySelectorAll(".barra");
+
+            // recorrer cada barra y asignar un valor aleatorio
+            for (var i = 0; i < barras.length; i++) {
+                // generar valor aleatorio entre 10 y 100
+                var valor = Math.floor(Math.random() * 91) + 10;
+
+                // actualizar la altura de la barra proporcional al valor
+                barras[i].style.height = valor * 3.5 + "px";
+
+                // actualizar la etiqueta con el nuevo valor
+                barras[i].querySelector("span").textContent = valor;
+            }
+        }
+
+        // actualizar las barras al iniciar
+        actualizarBarras();
+
+        // actualizar las barras cada segundo con setInterval
+        setInterval(actualizarBarras, 1000);
+    </script>
+</body>
+</html>

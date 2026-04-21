@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Puntos en Movimiento</title>
+    <style>
+        /* estilo general de la pagina */
+        body {
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+        /* titulo principal */
+        h2 {
+            color: #00ff88;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        /* nombre del autor */
+        h3 {
+            color: #a0c4ff;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        /* estilo del canvas */
+        #myCanvas {
+            border: 3px solid #00ff88;
+            border-radius: 10px;
+            background-color: #16213e;
+        }
+    </style>
+</head>
+<body>
+    <h2>Gráfico de Puntos en Movimiento</h2>
+    <h3>Realizado por: Ricardo M. Huaman A.</h3>
+
+    <!-- area de dibujo del canvas -->
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+
+    <script>
+        // obtener el canvas y el contexto de dibujo
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // colores para cada punto
+        var colores = ["red", "blue", "green", "orange", "purple", "black", "yellow"];
+
+        // arreglo con las coordenadas iniciales de los 7 puntos
+        var puntos = [
+            { x: 100, y: 100 },
+            { x: 200, y: 150 },
+            { x: 300, y: 200 },
+            { x: 400, y: 250 },
+            { x: 150, y: 350 },
+            { x: 350, y: 400 },
+            { x: 250, y: 80  }
+        ];
+
+        // funcion para dibujar los puntos en el canvas
+        function dibujarPuntos() {
+            // limpiar el canvas antes de redibujar
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // dibujar ejes cartesianos
+            ctx.beginPath();
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 1;
+            // eje X
+            ctx.moveTo(0, 250);
+            ctx.lineTo(500, 250);
+            // eje Y
+            ctx.moveTo(250, 0);
+            ctx.lineTo(250, 500);
+            ctx.stroke();
+
+            // recorrer cada punto y dibujarlo
+            for (var i = 0; i < puntos.length; i++) {
+                ctx.beginPath();
+                // dibujar circulo en la posicion del punto con radio 10
+                ctx.arc(puntos[i].x, puntos[i].y, 10, 0, 2 * Math.PI);
+                ctx.fillStyle = colores[i];
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        // funcion para actualizar la posicion de los puntos aleatoriamente
+        function actualizarPuntos() {
+            // recorrer cada punto y asignar nueva posicion aleatoria
+            for (var i = 0; i < puntos.length; i++) {
+                // nueva coordenada x aleatoria dentro del canvas
+                puntos[i].x = Math.floor(Math.random() * 480) + 10;
+                // nueva coordenada y aleatoria dentro del canvas
+                puntos[i].y = Math.floor(Math.random() * 480) + 10;
+            }
+            // redibujar los puntos en su nueva posicion
+            dibujarPuntos();
+        }
+
+        // dibujar los puntos al iniciar
+        dibujarPuntos();
+
+        // actualizar la posicion de los puntos cada segundo
+        setInterval(actualizarPuntos, 1000);
+    </script>
+</body>
+</html>
