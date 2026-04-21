@@ -10,24 +10,6 @@ Este repositorio contiene todos los entregables desarrollados a lo largo del cur
 
 ---
 
-## Ejercicios y Trabajos
-
-### Sesión 1
-| Ejercicio | Enlace |
-|---|---|
-| Actividad 1 | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/actividad1.html) |
-| Actividad 2 | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/actividad2.html) |
-| Círculo | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/circulo.html) |
-| Código de Barras | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/cod_barra.html) |
-| Cuadrado y Triángulo | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/cuadrado_triangulo.html) |
-
-### Sesión 2
-| Ejercicio | Enlace |
-|---|---|
-| Función Matemática | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/funcion_mate.html) |
-| Línea Dinámica | [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/linea_dinamica.html) |
-| Línea Dinámica Doble| [Ver](https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/doble_linea_dinamica.html) |
-
 ## Autor
 
 | **LinkedIn** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-Ricardo%20Huaman-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ricardo-manuel-huaman) |
