@@ -1,1 +1,533 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Computación Gráfica - Ricardo Huaman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #00ff88;
+      --green-dim: #00cc6a;
+      --green-dark: #003d22;
+      --bg: #0a0f0a;
+      --bg2: #0d150d;
+      --card: #111a11;
+      --card2: #152015;
+      --border: #1e3a1e;
+      --text: #c8f0d0;
+      --text-dim: #6b9e78;
+      --white: #f0fff4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      opacity: 0.18;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: var(--green);
+      background: rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.25);
+      border-radius: 20px;
+      padding: 4px 16px;
+      margin-bottom: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #00ff88 0%, #00e5ff 50%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      animation: shimmer 4s linear infinite;
+      background-size: 200% auto;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .hero-sub {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 520px;
+      margin: 0 auto 30px;
+      line-height: 1.7;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .hero-badges img {
+      height: 28px;
+      border-radius: 6px;
+    }
+
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      margin: 40px 0;
+      opacity: 0.4;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title span.icon {
+      font-size: 1.4rem;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: 12px;
+    }
+
+    .session-block {
+      margin-bottom: 40px;
+    }
+
+    .session-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--green);
+      background: rgba(0,255,136,0.07);
+      border-left: 3px solid var(--green);
+      padding: 6px 14px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 16px;
+      display: inline-block;
+      letter-spacing: 1px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), #00e5ff);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .card:hover {
+      border-color: var(--green);
+      background: var(--card2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,255,136,0.12);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+    }
+
+    .card-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.3;
+    }
+
+    .card-btn {
+      font-size: 0.75rem;
+      font-family: 'Fira Code', monospace;
+      color: var(--green);
+      background: rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 20px;
+      padding: 3px 12px;
+      margin-top: 2px;
+    }
+
+    .card:hover .card-btn {
+      background: rgba(0,255,136,0.18);
+    }
+
+    .author-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #00e5ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #0a0f0a;
+      flex-shrink: 0;
+    }
+
+    .author-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .author-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .author-meta {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .author-meta span {
+      color: var(--green);
+    }
+
+    .linkedin-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0077b5;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 12px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .linkedin-btn:hover {
+      background: #005f91;
+      transform: translateY(-2px);
+    }
+
+    .github-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: var(--white);
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .github-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,255,136,0.1);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    @media (max-width: 600px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .author-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="wrapper">
+
+  <div class="hero">
+    <div class="hero-tag">🎓 UTEA · 2026 - I</div>
+    <h1>Computación Gráfica</h1>
+    <p class="hero-sub">
+      Repositorio virtual para publicar los trabajos, ejercicios y proyectos del curso de <strong>Computación Gráfica</strong>.
+    </p>
+
+    <div class="hero-badges">
+      <img src="https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=visual-studio&logoColor=white" alt="Visual Studio"/>
+      <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++"/>
+      <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+      <img src="https://img.shields.io/badge/OpenGL-5586A4?style=for-the-badge&logo=opengl&logoColor=white" alt="OpenGL"/>
+      <img src="https://img.shields.io/badge/Blender-E87D0D?style=for-the-badge&logo=blender&logoColor=white" alt="Blender"/>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="section-title">
+    <span class="icon">📂</span> Ejercicios y Trabajos
+  </div>
+
+  <div class="session-block">
+    <div class="session-label">▸ Sesión 01</div>
+    <div class="cards-grid">
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/actividad1.html" target="_blank">
+        <div class="card-icon">⚡</div>
+        <div class="card-name">Actividad 1</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/actividad2.html" target="_blank">
+        <div class="card-icon">⚡</div>
+        <div class="card-name">Actividad 2</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/circulo.html" target="_blank">
+        <div class="card-icon">⭕</div>
+        <div class="card-name">Círculo</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/cod_barra.html" target="_blank">
+        <div class="card-icon">▌▌▌</div>
+        <div class="card-name">Código de Barras</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion_1/cuadrado_triangulo.html" target="_blank">
+        <div class="card-icon">🔷</div>
+        <div class="card-name">Cuadrado y Triángulo</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="session-block">
+    <div class="session-label">▸ Sesión 02</div>
+    <div class="cards-grid">
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/funcion_mate.html" target="_blank">
+        <div class="card-icon">📈</div>
+        <div class="card-name">Función Matemática</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/linea_dinamica.html" target="_blank">
+        <div class="card-icon">〰️</div>
+        <div class="card-name">Línea Dinámica</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+
+      <a class="card" href="https://ricardomh17.github.io/Curso-Computacion-Grafica/Sesion2/doble_linea_dinamica.html" target="_blank">
+        <div class="card-icon">🌊</div>
+        <div class="card-name">Línea Dinámica Doble</div>
+        <div class="card-btn">Ver →</div>
+      </a>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="section-title">
+    <span class="icon">👤</span> Autor
+  </div>
+
+  <div class="author-card">
+    <div class="author-avatar">RH</div>
+    <div class="author-info">
+      <div class="author-name">Ricardo M. Huaman A.</div>
+      <div class="author-meta">
+        <span>Código</span> · 202101963D<br/>
+        <span>Curso</span> · Computación Gráfica<br/>
+        <span>Institución</span> · UTEA<br/>
+        <span>Semestre</span> · 2026 - I
+      </div>
+
+      <a class="linkedin-btn" href="https://www.linkedin.com/in/ricardo-manuel-huaman" target="_blank">
+        LinkedIn
+      </a>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div style="text-align:center; padding: 10px 0 20px;">
+    <a class="github-btn" href="https://github.com/RicardoMH17/Curso-Computacion-Grafica" target="_blank">
+      Ver Repositorio en GitHub
+    </a>
+  </div>
+
+  <footer>
+    <p>Desarrollado como parte del curso de Computación Gráfica</p>
+  </footer>
+
+</div>
+
+<script>
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initNodes() {
+    nodes = [];
+    const count = Math.floor((W * H) / 18000);
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 2 + 1
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const maxDist = 140;
+
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      a.x += a.vx;
+      a.y += a.vy;
+
+      if (a.x < 0 || a.x > W) a.vx *= -1;
+      if (a.y < 0 || a.y > H) a.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#00ff88';
+      ctx.fill();
+
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+
+        if (d < maxDist) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(0,255,136,${1 - d / maxDist})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    initNodes();
+  });
+
+  resize();
+  initNodes();
+  draw();
+</script>
+
+</body>
+</html>
