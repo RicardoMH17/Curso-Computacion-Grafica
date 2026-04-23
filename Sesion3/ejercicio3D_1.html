@@ -1,60 +1,93 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Objetos 3D</title>
+    <style>
+        /* estilo general de la pagina */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        /* caja de informacion del ejercicio */
+        #info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #00ff88;
+        }
+        /* titulo del ejercicio */
+        #info h2 {
+            color: #00ff88;
+            margin: 0 0 4px 0;
+            font-size: 15px;
+        }
+        /* nombre del autor */
+        #info h3 {
+            color: #a0c4ff;
+            margin: 0;
+            font-size: 12px;
+            font-weight: normal;
+        }
+    </style>
 </head>
-    <body>
-        <!-- EJERCICIO DE TRASLACIÓN -->
+<body>
+
+    <!-- informacion del ejercicio -->
+    <div id="info">
+        <h2>Ejercicio de Traslación</h2>
+        <h3>Realizado por: Ricardo Manuel Huaman Ataulluco</h3>
+    </div>
+
+    <!-- EJERCICIO DE TRASLACIÓN -->
     <!-- USO DE LA LIBRERIA THREE.JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script>
-            // CREAR LA ESCENA
-            const scene = new THREE.Scene();
-            // CREAR UNA CAMARA
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            // CREAR UN RENDERIZADOR
-            const renderer = new THREE.WebGLRenderer();
-            
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+    <script>
+        // CREAR LA ESCENA
+        const scene = new THREE.Scene();
+        // CREAR UNA CAMARA
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // CREAR UN RENDERIZADOR
+        const renderer = new THREE.WebGLRenderer();
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-            // CREAR EL CUBO
+        // CREAR EL CUBO
+        const geometry = new THREE.BoxGeometry(1,1,1);
+        const material = new THREE.MeshNormalMaterial();
+        const cubo = new THREE.Mesh(geometry, material);
+        scene.add(cubo);
 
-            const geometry = new THREE.BoxGeometry(1,1,1);
-            const material = new THREE.MeshNormalMaterial();
-            const cubo = new THREE.Mesh(geometry, material);
-            scene.add(cubo);
+        // POSICIONAR LA CAMARA
+        camera.position.z = 5;
 
-            // POSICIONAR LA CAMARA
-            camera.position.z = 5;
+        // variables para controlar la posición del cubo
+        let direccion = 0.02;
 
-            // variables para controlar la posición del cubo
-
-            let direccion = 0.02;
-
-            // ANIMACIÓN 
-            function animate() {
-                requestAnimationFrame(animate);
-                // MOVER EL CUBO
-                cubo.position.x += direccion;
-                // CAMBIAR LA DIRECCIÓN SI EL CUBO LLEGA A LOS LÍMITE DERECHO 
-                if (cubo.position.x > 2) {
-                    direccion = -0.02;
-                }
-                // CAMBIAR LA DIRECCIÓN SI EL CUBO LLEGA A LOS LÍMITE IZQUIERDO 
-                if (cubo.position.x > -2) {
-                    direccion = 0.02;
-                }
-
-                //Dibujar la escena
-                renderer.render(scene, camera);
+        // ANIMACIÓN 
+        function animate() {
+            requestAnimationFrame(animate);
+            // MOVER EL CUBO
+            cubo.position.x += direccion;
+            // CAMBIAR LA DIRECCIÓN SI EL CUBO LLEGA A LOS LÍMITE DERECHO 
+            if (cubo.position.x > 2) {
+                direccion = -0.02;
             }
-            animate();
+            // CAMBIAR LA DIRECCIÓN SI EL CUBO LLEGA A LOS LÍMITE IZQUIERDO 
+            if (cubo.position.x < -2) {
+                direccion = 0.02;
+            }
 
-        </script>
-
-    </body>
+            //Dibujar la escena
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
 </html>
