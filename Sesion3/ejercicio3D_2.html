@@ -4,12 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cubo Rotando</title>
+    <style>
+        /* estilo general de la pagina */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        /* caja de informacion del ejercicio */
+        #info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #00ff88;
+        }
+        /* titulo del ejercicio */
+        #info h2 {
+            color: #00ff88;
+            margin: 0 0 4px 0;
+            font-size: 15px;
+        }
+        /* nombre del autor */
+        #info h3 {
+            color: #a0c4ff;
+            margin: 0;
+            font-size: 12px;
+            font-weight: normal;
+        }
+    </style>
 </head>
-    <body>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>    
-<!-- ROTACIÓN DE CUBO 3D -->
+<body>
 
-        <script>
+    <!-- informacion del ejercicio -->
+    <div id="info">
+        <h2>Rotación de Cubo 3D</h2>
+        <h3>Realizado por: Ricardo Manuel Huaman Ataulluco</h3>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- ROTACIÓN DE CUBO 3D -->
+    <script>
         // CREAR LA ESCENA
         const scene = new THREE.Scene();
         // CREAR UNA CAMARA
@@ -36,7 +73,6 @@
         }
         //EJECUTAR LA ANIMACIÓN
         animate();
-        </script>
-¿
-    </body>
+    </script>
+</body>
 </html>
