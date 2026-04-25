@@ -46,8 +46,8 @@
 <body>
     <!-- instrucciones para el usuario -->
     <div id="info">
-        <h1>Traslación, Rotación y Escalado</h1>
-        <h2>Realizado por: Ricardo M. Huaman A.</h2>
+        <h2>Traslación, Rotación y Escalado</h2>
+        <h3>Realizado por: Ricardo Manuel Huaman Ataulluco</h3>
         <p>FLECHAS: Mover el cubo</p>
         <p>Q / E : Rotar el cubo</p>
         <p>Z / X : Escalar el cubo</p>
@@ -81,22 +81,33 @@
 
         // POSICIONAR LA CAMARA
         camera.position.z = 5;
+
         // variables para controlar la dirección del movimiento mediante teclado
         window.addEventListener('keydown', (event) => {
             switch(event.key) {
-                //traslación 
+
+                //traslación
                 case 'ArrowUp':
                     cubo.position.y += 0.2; // mover hacia arriba
+                    // limite superior
+                    if (cubo.position.y > 3) cubo.position.y = 3;
                     break;
                 case 'ArrowDown':
                     cubo.position.y -= 0.2; // mover hacia abajo
+                    // limite inferior
+                    if (cubo.position.y < -3) cubo.position.y = -3;
                     break;
                 case 'ArrowLeft':
                     cubo.position.x -= 0.2; // mover hacia la izquierda
+                    // limite izquierdo
+                    if (cubo.position.x < -4) cubo.position.x = -4;
                     break;
                 case 'ArrowRight':
                     cubo.position.x += 0.2; // mover hacia la derecha
+                    // limite derecho
+                    if (cubo.position.x > 4) cubo.position.x = 4;
                     break;
+
                 // ROTACIÓN
                 case 'q':
                 case 'Q':
@@ -106,20 +117,23 @@
                 case 'E':
                     cubo.rotation.y += 0.1; // rotar a la derecha
                     break;
+
                 // ESCALADO
                 case 'z':
                 case 'Z':
                     cubo.scale.x += 0.1;
                     cubo.scale.y += 0.1;
                     cubo.scale.z += 0.1;
+                    // escalar hacia arriba
                     break;
                 case 'x':
-                    cubo.scale.x = Math.max(0.2, cubo.scale.x - 0.1);
+                    cubo.scale.x = Math.max(0.2, cubo.scale.x - 0.1); // limitar el escalado hacia abajo
                     cubo.scale.y = Math.max(0.2, cubo.scale.y - 0.1);
-                    cubo.scale.z = Math.max(0.2, cubo.scale.z - 0.1);
+                    cubo.scale.z = Math.max(0.2, cubo.scale.z - 0.1); // escalar hacia abajo
                     break;
             }
         });
+
         function animate() {
             requestAnimationFrame(animate);
             // DIBUJAR LA ESCENA
