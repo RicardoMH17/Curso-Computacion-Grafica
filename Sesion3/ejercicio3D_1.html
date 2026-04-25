@@ -60,7 +60,8 @@
 
         // CREAR EL CUBO
         const geometry = new THREE.BoxGeometry(1,1,1);
-        const material = new THREE.MeshNormalMaterial();
+        // material con un solo color
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff88 });
         const cubo = new THREE.Mesh(geometry, material);
         scene.add(cubo);
 
