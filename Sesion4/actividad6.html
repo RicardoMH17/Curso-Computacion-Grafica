@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigación: Curvas Paramétricas y Mallas Poligonales</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f5f5f0; font-family: "Times New Roman", Times, serif; font-size: 12pt; color: #1a1a1a; line-height: 1.8; }
+        .pagina { max-width: 816px; margin: 40px auto; background: #ffffff; padding: 72px 90px; box-shadow: 0 2px 20px rgba(0,0,0,0.12); }
+        .encabezado { text-align: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 2px solid #1a1a1a; }
+        .encabezado .institucion { font-size: 16pt; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #444; margin-bottom: 6px; }
+        .encabezado .curso { font-size: 14pt; color: #555; margin-bottom: 20px; }
+        .titulo-principal { font-size: 16pt; font-weight: bold; text-transform: uppercase; text-align: center; margin-bottom: 8px; line-height: 1.4; }
+        .subtitulo { font-size: 12pt; text-align: center; color: #333; margin-bottom: 24px; }
+        .autor { text-align: center; font-size: 11pt; margin-bottom: 4px; }
+        h2 { font-size: 13pt; font-weight: bold; text-align: center; text-transform: uppercase; margin: 36px 0 16px 0; letter-spacing: 0.5px; }
+        h3 { font-size: 12pt; font-weight: bold; margin: 24px 0 10px 0; }
+        p { text-align: justify; text-indent: 36px; margin-bottom: 12px; }
+        .sin-sangria { text-indent: 0 !important; }
+        .cita-bloque { margin: 16px 0 16px 72px; font-size: 11pt; text-align: justify; text-indent: 0; line-height: 1.6; color: #222; font-style: italic; }
+        .divisor { border: none; border-top: 1px solid #ccc; margin: 32px 0; }
+        .ref { text-indent: -36px; padding-left: 36px; margin-bottom: 12px; font-size: 11pt; text-align: justify; line-height: 1.6; }
+        .ref a { color: #1a1a1a; word-break: break-all; }
+        .ref a:hover { color: #0066cc; }
+        .pie { text-align: center; margin-top: 48px; font-size: 10pt; color: #888; border-top: 1px solid #ddd; padding-top: 12px; }
 
+        /* estilos para tablas */
+        .tabla-contenedor { margin: 20px 0 8px 0; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 11pt; }
+        th { background-color: #2c2c2c; color: #ffffff; padding: 8px 12px; text-align: center; font-weight: bold; font-size: 10.5pt; }
+        td { padding: 7px 12px; border: 1px solid #ccc; text-align: left; vertical-align: top; }
+        tr:nth-child(even) td { background-color: #f7f7f5; }
+        tr:nth-child(odd) td { background-color: #ffffff; }
+        .tabla-nota { font-size: 10pt; color: #444; margin-top: 6px; text-indent: 0; font-style: italic; }
+        .tabla-titulo { font-size: 11pt; font-weight: bold; text-align: center; margin-bottom: 6px; text-indent: 0; }
+        @media print {
+            button { display: none !important; }
+            body { background-color: #ffffff; }
+            .pagina { box-shadow: none; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="pagina">
+
+    <!-- ENCABEZADO -->
+    <div class="encabezado">
+        <div class="institucion">Universidad Tecnológica de los Andes</div>
+        <img src="ESCUDO_UTEA.jpg" alt="Logo UTEA" style="height: 120px; margin: 8px 0;">
+        <div class="curso">Escuela Profesional de Ingeniería de Sistemas e Informática</div>
+        <img src="transparente_sis.png" alt="Logo Carrera" style="height: 120px; margin: 6px 0;">
+        <div class="curso">Curso: Computación Gráfica</div>
+        <div class="titulo-principal">Curvas Paramétricas y Mallas Poligonales<br>en la Computación Gráfica</div>
+        <div class="subtitulo">Investigación Académica — Actividad 6</div>
+        <div class="autor"><strong>Autor:</strong> Ricardo Manuel Huaman Ataulluco</div>
+        <div class="autor"><strong>Código:</strong> 202101963D</div>
+        <div class="autor"><strong>Docente:</strong> Mag. Elvio Tintaya Zegarra</div>
+        <div class="autor"><strong>Fecha:</strong> Cusco - 2026</div>
+    </div>
+
+    <!-- RESUMEN -->
+    <h2>Resumen</h2>
+    <p>Esta investigación analiza dos pilares de la computación gráfica: las curvas paramétricas y las mallas poligonales. Ambas son estructuras geométricas que permiten representar formas complejas en entornos digitales 2D y 3D, y su comprensión resulta indispensable para el trabajo con herramientas como Three.js, Blender o los motores de videojuegos modernos. La revisión se apoya en artículos científicos indexados en ACM Digital Library, IEEE Xplore y arXiv, seleccionados por su solidez teórica y relevancia histórica dentro del campo.</p>
+    <p><strong>Palabras clave:</strong> curvas paramétricas, mallas poligonales, computación gráfica, Bézier, B-spline, NURBS, modelado 3D, vértices, polígonos.</p>
+
+    <hr class="divisor">
+
+    <!-- INTRODUCCIÓN -->
+    <h2>Introducción</h2>
+    <p>Cuando se trabaja con objetos 3D en pantalla, ya sea en un videojuego, una animación o una aplicación web interactiva, todo lo que el usuario ve está construido sobre estructuras matemáticas precisas. La computación gráfica estudia precisamente eso: cómo representar la geometría del mundo real dentro de un sistema digital. No basta con dibujar líneas o cuadrados; se necesitan herramientas capaces de describir curvas suaves, superficies irregulares y formas orgánicas de manera eficiente.</p>
+    <p>Dos de esas herramientas fundamentales son las curvas paramétricas y las mallas poligonales. Sederberg y Parry (1986) demostraron que incluso deformaciones libres sobre objetos sólidos podían modelarse mediante polinomios de Bernstein trivariantes, lo que estableció un puente directo entre el álgebra paramétrica y la manipulación interactiva de modelos tridimensionales (p. 151). Décadas después, ese mismo principio subyace en herramientas cotidianas de diseño y animación 3D.</p>
+    <p>Esta investigación busca revisar ambos conceptos desde sus fundamentos teóricos, conectarlos con los ejercicios realizados en clase con Three.js, y comprender por qué siguen siendo los enfoques dominantes en la industria gráfica actual.</p>
+
+    <hr class="divisor">
+
+    <!-- CAPÍTULO 1 -->
+    <h2>1. Curvas Paramétricas</h2>
+
+    <h3>1.1 Definición y Fundamentos Matemáticos</h3>
+    <p>Una curva paramétrica expresa las coordenadas de cada punto en el espacio como funciones de un parámetro escalar <em>t</em>, generalmente acotado en el intervalo [0, 1]. Esto la diferencia de las representaciones explícitas o implícitas: mientras que una función explícita asigna un único valor de <em>y</em> por cada valor de <em>x</em>, una curva paramétrica puede describir espirales, lazos y formas cerradas sin ninguna restricción de ese tipo. Stone y DeRose (1989) la representan formalmente como:</p>
+    <div class="cita-bloque">
+        P(t) = (x(t), y(t), z(t)),&nbsp; donde t ∈ [0, 1]<br><br>
+        siendo x(t), y(t) y z(t) funciones continuas que determinan la posición del punto en cada eje del espacio (Stone y DeRose, 1989, p. 148).
+    </div>
+    <p>Lo importante de esta definición es que el parámetro <em>t</em> actúa como un "instante de tiempo" que recorre la curva de inicio a fin. Podemos acertar que este concepto no es ajeno al trabajo cotidiano en Three.js: cada vez que actualizamos <code>cubo.position.x += direccion</code> dentro de la función <code>animate()</code>, estamos evaluando implícitamente una función de posición en función del tiempo, lo cual es, en esencia, una curva paramétrica discreta aplicada al movimiento de un objeto 3D.</p>
+
+    <h3>1.2 Tipos de Curvas Paramétricas</h3>
+    <p>Dentro de la computación gráfica, no existe un único tipo de curva paramétrica, sino una familia de representaciones que evolucionaron progresivamente para dar mayor control y eficiencia al diseñador. Las tres más relevantes son las curvas de Bézier, las B-spline y las NURBS. Sederberg y Parry (1986) usaron las curvas de Bézier como base de su técnica de deformación libre, lo que refleja su capacidad para representar transformaciones geométricas complejas de forma intuitiva y matemáticamente sólida. Las B-spline, por su parte, extienden ese modelo permitiendo el control local: modificar un punto de control no altera toda la curva, sino solo la región cercana a ese punto (Stone y DeRose, 1989, p. 149).</p>
+
+    <p class="sin-sangria">La siguiente tabla resume las diferencias principales entre los tres tipos:</p>
+
+    <div class="tabla-contenedor">
+        <p class="tabla-titulo">Tabla 1<br><em>Comparación entre los principales tipos de curvas paramétricas en computación gráfica</em></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Característica</th>
+                    <th>Bézier</th>
+                    <th>B-spline</th>
+                    <th>NURBS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pasa por los puntos de control</td>
+                    <td>Solo en extremos</td>
+                    <td>No necesariamente</td>
+                    <td>No necesariamente</td>
+                </tr>
+                <tr>
+                    <td>Control local</td>
+                    <td>No</td>
+                    <td>Sí</td>
+                    <td>Sí</td>
+                </tr>
+                <tr>
+                    <td>Pesos (racionalidad)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Sí</td>
+                </tr>
+                <tr>
+                    <td>Representa cónicas exactas</td>
+                    <td>Aproximado</td>
+                    <td>Aproximado</td>
+                    <td>Exacto</td>
+                </tr>
+                <tr>
+                    <td>Uso típico</td>
+                    <td>Diseño 2D, fuentes</td>
+                    <td>Animación, CAD</td>
+                    <td>Modelado industrial, Blender</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="tabla-nota"><em>Nota.</em> Elaboración propia a partir de Stone y DeRose (1989) y Sederberg y Parry (1986).</p>
+    </div>
+
+    <h3>1.3 NURBS y su Implementación en Tiempo Real</h3>
+    <p>Las NURBS (Non-Uniform Rational B-Splines) son la generalización más completa del modelo paramétrico. Su capacidad de representar exactamente cónicas —circunferencias, elipses, parábolas— las convierte en la opción preferida para el diseño industrial de precisión. Krishnamurthy et al. (2009) llevaron esta representación al siguiente nivel al implementar algoritmos para evaluar superficies NURBS directamente en la GPU, logrando "calcular normales exactas tanto en superficies racionales como no racionales" y extender el evaluador para operaciones de modelado estándar en tiempo real (p. 530).</p>
+    <p>El impacto de ese trabajo fue significativo: antes de él, las operaciones de intersección de rayos o evaluación inversa sobre NURBS eran tareas pesadas que debían ejecutarse en CPU. Podemos acertar que la posibilidad de realizarlas en GPU abrió la puerta a aplicaciones de diseño interactivo donde el usuario puede modificar la superficie y ver los resultados de manera inmediata, sin esperar recálculos costosos. Krishnamurthy et al. (2009) confirmaron este punto al señalar que sus algoritmos permiten al diseñador "esbozar directamente sobre la superficie real para crear nuevas características geométricas" (p. 531).</p>
+
+    <hr class="divisor">
+
+    <!-- CAPÍTULO 2 -->
+    <h2>2. Mallas Poligonales</h2>
+
+    <h3>2.1 Definición y Estructura</h3>
+    <p>Una malla poligonal es una colección discreta de vértices, aristas y caras que aproxima la superficie de un objeto tridimensional. A diferencia de las curvas paramétricas, que describen la geometría de forma continua y exacta, las mallas trabajan con un número finito de polígonos planos que se ajustan a la forma deseada. Attene et al. (2013) las definen formalmente como "una colección de aristas, vértices y polígonos conectados de tal forma que cada arista es compartida por, a lo sumo, dos polígonos" (p. 2), definición que delimita claramente las condiciones de validez topológica que debe cumplir una malla para ser procesada correctamente por un motor gráfico.</p>
+    <p>Nash et al. (2020) amplían esa perspectiva al destacar que las mallas poligonales son "una representación eficiente de la geometría 3D, de importancia central en computación gráfica, robótica y desarrollo de videojuegos" (párr. 1). Desde el curso, podemos acertar que esto se evidencia directamente: cada vez que Three.js instancia un objeto con <code>THREE.BoxGeometry</code>, lo que se crea internamente es una malla poligonal compuesta por doce triángulos que forman las seis caras del cubo. No hay ninguna descripción matemática continua del sólido; todo son vértices, aristas y caras.</p>
+
+    <h3>2.2 Elementos Constitutivos y Atributos</h3>
+    <p>La estructura interna de una malla poligonal va más allá de los tres elementos geométricos básicos. Cada vértice puede almacenar atributos adicionales que el motor gráfico utiliza durante el renderizado: coordenadas UV para el mapeo de texturas, vectores normales para el cálculo de iluminación y colores por vértice. Lachaud et al. (2020) extendieron este marco al demostrar que propiedades diferenciales de la superficie —como la curvatura media y gaussiana— pueden estimarse con alta precisión directamente desde la topología discreta de la malla, sin necesidad de reconstruir ninguna superficie continua subyacente. Este resultado tiene implicaciones directas en aplicaciones de análisis de forma y síntesis 3D.</p>
+
+    <p class="sin-sangria">La siguiente tabla detalla los elementos de una malla y su función dentro del sistema gráfico:</p>
+
+    <div class="tabla-contenedor">
+        <p class="tabla-titulo">Tabla 2<br><em>Elementos constitutivos de una malla poligonal y su función en el pipeline gráfico</em></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Elemento</th>
+                    <th>Definición</th>
+                    <th>Atributos adicionales</th>
+                    <th>Función en el renderizado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Vértice</strong></td>
+                    <td>Punto en (x, y, z)</td>
+                    <td>Normal, UV, color</td>
+                    <td>Transformaciones, iluminación</td>
+                </tr>
+                <tr>
+                    <td><strong>Arista</strong></td>
+                    <td>Segmento entre dos vértices</td>
+                    <td>—</td>
+                    <td>Define topología de la malla</td>
+                </tr>
+                <tr>
+                    <td><strong>Cara (triángulo)</strong></td>
+                    <td>Polígono de 3 vértices</td>
+                    <td>Normal de cara</td>
+                    <td>Rasterización en la GPU</td>
+                </tr>
+                <tr>
+                    <td><strong>Cara (quad)</strong></td>
+                    <td>Polígono de 4 vértices</td>
+                    <td>Normal de cara</td>
+                    <td>Modelado artístico y animación</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="tabla-nota"><em>Nota.</em> Elaboración propia a partir de Attene et al. (2013) y Lachaud et al. (2020).</p>
+    </div>
+
+    <h3>2.3 Simplificación, Subdivisión y Nivel de Detalle</h3>
+    <p>Uno de los grandes desafíos de las mallas poligonales en tiempo real es el equilibrio entre detalle visual y costo computacional. Un modelo de alta resolución puede tener millones de polígonos, lo cual resulta inviable para el renderizado en tiempo real. Garland y Heckbert (1997) abordaron este problema con su algoritmo de simplificación mediante contracción de aristas y métricas de error cuadrático, el cual permite "aproximar eficientemente las propiedades de superficie en los vértices de la malla simplificada" conservando la apariencia visual del modelo original con una fracción del número original de polígonos (p. 209). Por otro lado, Catmull y Clark (1978) propusieron el enfoque inverso: partir de una malla simple y subdividirla recursivamente hasta obtener superficies suaves de clase C², lo que hoy es el estándar en Pixar, DreamWorks y la mayoría de los estudios de animación.</p>
+    <p>Más recientemente, Nash et al. (2020) abordaron el problema desde la generación automática de mallas con PolyGen, un modelo de aprendizaje profundo basado en Transformers que produce mallas poligonales coherentes condicionadas por imágenes o categorías de objetos. Podemos acertar que este tipo de investigación marca una convergencia entre la representación clásica de mallas y las técnicas modernas de inteligencia artificial, lo que anticipa un cambio significativo en la forma en que se crearán modelos 3D en los próximos años.</p>
+
+    <hr class="divisor">
+
+    <!-- CONCLUSIONES -->
+    <h2>Conclusiones</h2>
+    <p>Las curvas paramétricas y las mallas poligonales no son conceptos opuestos, sino complementarios. Las primeras ofrecen precisión matemática y control continuo sobre la geometría, siendo indispensables en el diseño industrial, la animación de trayectorias y la tipografía digital. Las segundas sacrifican esa continuidad a cambio de eficiencia computacional, lo que las convierte en el estándar absoluto para el renderizado en tiempo real en videojuegos, simuladores y aplicaciones de realidad aumentada.</p>
+    <p>A lo largo de esta revisión, los trabajos de Stone y DeRose (1989), Sederberg y Parry (1986), Krishnamurthy et al. (2009), Catmull y Clark (1978), Attene et al. (2013), Lachaud et al. (2020), Garland y Heckbert (1997) y Nash et al. (2020) confirman que ambas representaciones han sido objeto de investigación científica continua y rigurosa desde hace más de cuatro décadas. Sus fundamentos no han sido reemplazados; por el contrario, siguen siendo la base sobre la que se construyen herramientas modernas como Three.js, Blender y Unreal Engine.</p>
+    <p>Podemos acertar que para un profesional en sistemas e informática, conocer estas estructuras no es un lujo académico, sino una necesidad práctica. Cada objeto que se instancia en Three.js, cada animación que se programa con <code>requestAnimationFrame</code> y cada escena 3D que se renderiza en tiempo real descansa sobre estos mismos principios matemáticos. Comprender de dónde vienen y cómo funcionan permite escribir código más consciente, optimizar mejor el rendimiento y, en última instancia, construir aplicaciones gráficas de mayor calidad.</p>
+
+    <hr class="divisor">
+
+    <!-- REFERENCIAS -->
+    <div class="referencias">
+        <h2>Referencias</h2>
+
+        <p class="ref">Attene, M., Campen, M., y Kobbelt, L. (2013). Polygon mesh repairing: An application perspective. <em>ACM Computing Surveys</em>, <em>45</em>(2), Artículo 15. <a href="https://doi.org/10.1145/2431211.2431214" target="_blank">https://doi.org/10.1145/2431211.2431214</a></p>
+
+        <p class="ref">Catmull, E., y Clark, J. (1978). Recursively generated B-spline surfaces on arbitrary topological meshes. <em>Computer-Aided Design</em>, <em>10</em>(6), 350–355. <a href="https://doi.org/10.1016/0010-4485(78)90110-0" target="_blank">https://doi.org/10.1016/0010-4485(78)90110-0</a></p>
+
+        <p class="ref">Garland, M., y Heckbert, P. S. (1997). Surface simplification using quadric error metrics. En <em>Proceedings of the 24th Annual Conference on Computer Graphics and Interactive Techniques</em> (SIGGRAPH '97) (pp. 209–216). ACM Press/Addison-Wesley. <a href="https://doi.org/10.1145/258734.258849" target="_blank">https://doi.org/10.1145/258734.258849</a></p>
+
+        <p class="ref">Krishnamurthy, A., Khardekar, R., McMains, S., Haller, K., y Elber, G. (2009). Performing efficient NURBS modeling operations on the GPU. <em>IEEE Transactions on Visualization and Computer Graphics</em>, <em>15</em>(4), 530–543. <a href="https://doi.org/10.1109/TVCG.2008.238" target="_blank">https://doi.org/10.1109/TVCG.2008.238</a></p>
+
+        <p class="ref">Lachaud, J.-O., Romon, P., Thibert, B., y Coeurjolly, D. (2020). Interpolated corrected curvature measures for polygonal surfaces. <em>Computer Graphics Forum</em>, <em>39</em>(5), 01–15. <a href="https://doi.org/10.1111/cgf.14067" target="_blank">https://doi.org/10.1111/cgf.14067</a></p>
+
+        <p class="ref">Nash, C., Ganin, Y., Eslami, S. M. A., y Battaglia, P. W. (2020). PolyGen: An autoregressive generative model of 3D meshes. <em>arXiv</em>. <a href="https://doi.org/10.48550/arXiv.2002.10880" target="_blank">https://doi.org/10.48550/arXiv.2002.10880</a></p>
+
+        <p class="ref">Sederberg, T. W., y Parry, S. R. (1986). Free-form deformation of solid geometric models. <em>ACM SIGGRAPH Computer Graphics</em>, <em>20</em>(4), 151–160. <a href="https://doi.org/10.1145/15886.15903" target="_blank">https://doi.org/10.1145/15886.15903</a></p>
+
+        <p class="ref">Stone, M. C., y DeRose, T. D. (1989). A geometric characterization of parametric cubic curves. <em>ACM Transactions on Graphics</em>, <em>8</em>(3), 147–163. <a href="https://doi.org/10.1145/77055.77056" target="_blank">https://doi.org/10.1145/77055.77056</a></p>
+    </div>
+
+    <div class="pie">
+    Ricardo M. Huaman A. &nbsp;|&nbsp; Computación Gráfica &nbsp;|&nbsp; UTEA 2026-I
+    <br><br>
+    <button onclick="window.print()" style ="
+        margin-top: 0px;
+        padding: 10px 28px;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        font-family: 'Times New Roman', serif;
+        font-size: 11pt;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        letter-spacing: 0.5px;
+    ">Descargar PDF</button>
+</div>
+
+</div>
+</body>
+</html
