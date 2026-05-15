@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Exposición: Recorrido Virtual 3D</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        #overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); color: white; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10; cursor: pointer;
+        }
+        #overlay.hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="overlay">
+    <h1>Proyecto: Casa 3D Realista</h1>
+    <p>W, A, S, D para caminar | Mouse para mirar</p>
+    <h2 style="color: #4CAF50;">Click para iniciar</h2>
+</div>
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+    import { Sky } from 'three/addons/objects/Sky.js';
+
+    // --- 1. ESCENA, CÁMARA Y RENDERIZADOR ---
+    const scene = new THREE.Scene();
+    // Perspectiva: Campo de visión 75°, relación de aspecto, planos de corte cercano/lejano
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true }); // Antialias para bordes suaves
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true; // Habilitar cálculo de sombras
+    renderer.shadowMap.type = THREE.VSMShadowMap; // Sombras de alta calidad (suaves)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; // Efecto cinematográfico de luz
+    document.body.appendChild(renderer.domElement);
+
+    // --- 2. ILUMINACIÓN AMBIENTAL Y SOLAR ---
+    // Luz de hemisferio: simula luz del cielo (azul) y rebote del suelo (verde)
+    const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0x1b4d0e, 0.6);
+    scene.add(hemiLight);
+
+    // Luz Direccional: Actúa como el Sol, genera sombras proyectadas
+    const sunLight = new THREE.DirectionalLight(0xffffff, 1.8);
+    sunLight.position.set(50, 100, 50);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.set(2048, 2048); // Resolución de la sombra
+    scene.add(sunLight);
+
+    // --- 3. CREACIÓN DEL CIELO (SKY) ---
+    const sky = new Sky();
+    sky.scale.setScalar(450000);
+    scene.add(sky);
+    // Configuración física del cielo (dispersión de Rayleigh y turbidez)
+    sky.material.uniforms['sunPosition'].value.set(0.5, 0.2, 0.5);
+
+    // --- 4. ENTORNO: SUELO Y BOSQUE ---
+    // Plano del suelo con textura repetida de césped
+    const groundTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
+    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    groundTexture.repeat.set(100, 100);
+    const ground = new THREE.Mesh(
+        new THREE.PlaneGeometry(1000, 1000),
+        new THREE.MeshStandardMaterial({ map: groundTexture })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Función para crear árboles (Tronco y Hojas)
+    function createTree(x, z) {
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 2), new THREE.MeshStandardMaterial({color: 0x5d4037}));
+        const leaves = new THREE.Mesh(new THREE.DodecahedronGeometry(1.5), new THREE.MeshStandardMaterial({color: 0x2e7d32}));
+        const tree = new THREE.Group();
+        trunk.position.y = 1; leaves.position.y = 3;
+        tree.add(trunk, leaves);
+        tree.position.set(x, 0, z);
+        scene.add(tree);
+    }
+    // Generar bosque aleatorio
+    for(let i=0; i<100; i++) {
+        let x = (Math.random() - 0.5) * 200;
+        let z = (Math.random() - 0.5) * 200;
+        if(Math.abs(x) > 10 || Math.abs(z) > 10) createTree(x, z);
+    }
+
+    // --- 5. CARGA DEL MODELO 3D (house.glb) ---
+    const collidableObjects = []; // Lista de objetos que bloquean el paso
+    const loader = new GLTFLoader();
+    loader.load('house.glb', (gltf) => {
+        const house = gltf.scene;
+        scene.add(house);
+        house.traverse(child => {
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                // Si el nombre del objeto indica que es una pared o cubo, habilitar colisión
+                if (child.name.toLowerCase().includes('wall') || child.name.toLowerCase().includes('cube')) {
+                    collidableObjects.push(child);
+                }
+            }
+        });
+    });
+
+    // --- 6. CONTROLES Y LÓGICA DE MOVIMIENTO ---
+    const controls = new PointerLockControls(camera, document.body);
+    
+    // Altura de la cámara para "caminar al ras": 1.7m es la altura de los ojos estándar.
+    camera.position.y = 1.7;
+
+    const overlay = document.getElementById('overlay');
+    overlay.addEventListener('click', () => controls.lock());
+    controls.addEventListener('lock', () => overlay.classList.add('hidden'));
+    controls.addEventListener('unlock', () => overlay.classList.remove('hidden'));
+
+    let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
+    const velocity = new THREE.Vector3(); // Vector de velocidad actual
+    const clock = new THREE.Clock(); // Para que el movimiento sea fluido sin importar los FPS
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'KeyW') moveForward = true;
+        if (e.code === 'KeyS') moveBackward = true;
+        if (e.code === 'KeyA') moveLeft = true;
+        if (e.code === 'KeyD') moveRight = true;
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.code === 'KeyW') moveForward = false;
+        if (e.code === 'KeyS') moveBackward = false;
+        if (e.code === 'KeyA') moveLeft = false;
+        if (e.code === 'KeyD') moveRight = false;
+    });
+
+    // --- 7. DETECCIÓN DE COLISIONES ---
+    // Se lanza un rayo invisible desde la cámara en la dirección del movimiento
+    // Se ajusta el radio de detección a 0.7m para un margen de seguridad.
+    const raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 0.7);
+
+    function canMove(directionVector) {
+        raycaster.ray.origin.copy(camera.position);
+        raycaster.ray.origin.y = 1.0; // Altura de detección (cintura)
+        raycaster.ray.direction.copy(directionVector);
+        return raycaster.intersectObjects(collidableObjects).length === 0;
+    }
+
+    // --- 8. BUCLE DE RENDERIZADO (ANIMACIÓN) ---
+    function animate() {
+        requestAnimationFrame(animate);
+        const delta = clock.getDelta(); // Tiempo transcurrido desde el último frame
+
+        if (controls.isLocked) {
+            // Fricción/Desaceleración (para que no patine infinitamente)
+            velocity.x -= velocity.x * 10.0 * delta;
+            velocity.z -= velocity.z * 10.0 * delta;
+
+            const speed = 25.0; // Fuerza de empuje de caminata
+            if (moveForward) velocity.z -= speed * delta;
+            if (moveBackward) velocity.z += speed * delta;
+            if (moveLeft) velocity.x -= speed * delta;
+            if (moveRight) velocity.x += speed * delta;
+
+            // --- APLICAR MOVIMIENTO CON CORRECCIÓN ---
+            // Dirección adelante/atrás
+            const dirZ = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
+            dirZ.y = 0; dirZ.normalize(); // Asegurar movimiento solo horizontal
+            if (velocity.z !== 0) {
+                // Comprobar colisión en la dirección de movimiento
+                if (canMove(dirZ.clone().multiplyScalar(Math.sign(velocity.z)))) {
+                    controls.moveForward(-velocity.z * delta);
+                }
+            }
+
+            // Dirección lateral (CORREGIDA para evitar inversión)
+            const dirX = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
+            dirX.y = 0; dirX.normalize(); // Asegurar movimiento solo horizontal
+            if (velocity.x !== 0) {
+                // Comprobar colisión en la dirección de movimiento
+                // Si al mover a la derecha no hay pared, permitir movimiento
+                if (canMove(dirX.clone().multiplyScalar(Math.sign(velocity.x)))) {
+                    controls.moveRight(velocity.x * delta);
+                }
+            }
+            
+            // Reajuste de altura: asegura que la cámara siempre esté a 1.7m sobre el plano del suelo.
+            // Esto evita cualquier hundimiento o elevación no deseada al caminar.
+            camera.position.y = 1.7;
+        }
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Reajustar tamaño si se cambia el tamaño del navegador
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body>
+</html>
